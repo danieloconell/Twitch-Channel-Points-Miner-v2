@@ -368,6 +368,15 @@ class WebSocketsPool:
                                     "PREDICTION_MADE",
                                     f"Decision: {event_prediction.bet.decision['choice']} - {event_prediction.title}",
                                 )
+                    elif message.topic == f"community-moments-channel-v1":
+                        logger.info("RECEIVED MOMENT", message.data, message.topic)
+                        ws.twitch.claim_moment(
+                            ws.streamers[streamer_index],
+                            # dont think this is the correct keys
+                            message.data["moment_id"]
+                        )
+                    else:
+                        logger.info(f"RECEIVED UNKNOWN TOPIC {message.topic} {message.data}")
                 except Exception:
                     logger.error(
                         f"Exception raised for topic: {message.topic} and message: {message}",

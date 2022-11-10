@@ -769,3 +769,17 @@ class Twitch(object):
                 self.__check_connection_handler(chunk_size)
 
             self.__chuncked_sleep(60, chunk_size=chunk_size)
+
+    def claim_moment(self, streamer, moment_id):
+        logger.info(
+            f"Claiming channel moment for {streamer}!",
+            extra={
+                "emoji": ":clapper:",
+                "event": Events.MOMENT_CLAIM,
+            },
+        )
+
+        json_data = copy.deepcopy(GQLOperations.ClaimCommunityMoment)
+        json_data["variables"] = { "input": {"momentID": moment_id} }
+        resp = self.post_gql_request(json_data)
+        logger.info("RESP", resp)
